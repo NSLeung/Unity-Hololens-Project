@@ -11,6 +11,9 @@ public class generateAtoms : MonoBehaviour
     private GameObject[] AatomsArray = new GameObject[8];
     private GameObject[] XatomsArray = new GameObject[7];
     public float XatomsRadius = 30f;
+    public Color XatomsColor = new Color();
+
+    public Color planeColor = new Color(0, 1, 1);
 
     public Vector3[] XatomCoords = new Vector3[7];
 
@@ -61,7 +64,8 @@ public class generateAtoms : MonoBehaviour
                 XatomsArray[i].transform.position = XatomCoords[i];
                 //radius
                 XatomsArray[i].transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-
+                //color
+                XatomsArray[i].GetComponent<Renderer>().material.color = XatomsColor;
                 //make octahedra the parent of the X atoms
                 XatomsArray[i].transform.parent = octahedraArray[m].transform;
                 octahedraArray[m].transform.parent = gameObject.transform;
@@ -92,6 +96,7 @@ public class generateAtoms : MonoBehaviour
 
             for (int j = 0; j < planeArray.Length; j++)
             {
+                //copy this if need to clone planes
                 planeArray[j] = new GameObject("plane" + (j+1));
                 filter = planeArray[j].AddComponent<MeshFilter>();
                 renderer2 = planeArray[j].AddComponent<MeshRenderer>();
@@ -113,7 +118,10 @@ public class generateAtoms : MonoBehaviour
                 mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
                 mat.renderQueue = 3000;
 
-                planeArray[j].GetComponent<Renderer>().material.color = new Color(0, 1, 1);
+                planeArray[j].GetComponent<Renderer>().material.color = new Color(1,0,1, 0.1f);
+
+                //make planes children of perovskite
+                planeArray[j].transform.parent = octahedraArray[m].transform;
             }
 
         }
