@@ -12,10 +12,14 @@ public class generateAtoms : MonoBehaviour
     private GameObject[] XatomsArray = new GameObject[7];
     private GameObject[] BatomsArray = new GameObject[8];
 
-    public float XatomsRadius = 30f;
+    private float XatomsRadius = 0.25f;
+    private float BatomsRadius = 0.5f;
+    public Color XatomsColor = Color.red;
+    private Color BatomsColor = Color.blue;
+    private Color AatomsColor = Color.white;
 
     public Vector3[] XatomCoords = new Vector3[7];
-    private Vector3[] BatomCoords = new Vector3[8];
+    private Vector3[] AatomCoords = new Vector3[8];
 
     private Vector3[][] meshVerts = new Vector3[8][];
     private Mesh mesh = new Mesh();
@@ -24,7 +28,7 @@ public class generateAtoms : MonoBehaviour
 
     public float transformX = 0;
     public float transformY = 0;
-    public float transformZ = 20;
+    public float transformZ = 0;
 
     private GameObject[] planeArray = new GameObject[8];
     private GameObject[] planeArrayCopy = new GameObject[8];
@@ -32,6 +36,10 @@ public class generateAtoms : MonoBehaviour
 
     MeshFilter filter;
     MeshRenderer renderer2;
+
+    private int octCounter = 1;
+
+    private GameObject Batom = new GameObject("B");
     void Start()
     {
         generateOctahedra();
@@ -40,18 +48,19 @@ public class generateAtoms : MonoBehaviour
     public void dimensionGenerator()
     {
 
-        for (int w = 0; w < dimensions-1; w++)
+        for (int w = 0; w < dimensions; w++)
         {
+            /*
             //x+=2
             transformX += 2;
             generateOctahedra();
             resetTransforms();
-            
+            /*
             //z+=2
             transformZ += 2;
             generateOctahedra();
             resetTransforms();
-            
+
             //x, z+=2
             transformX += 2;
             transformZ += 2;
@@ -80,7 +89,7 @@ public class generateAtoms : MonoBehaviour
             transformZ += 2;
             generateOctahedra();
             resetTransforms();
-
+            */
         }
     }
     public void resetTransforms()
@@ -91,7 +100,8 @@ public class generateAtoms : MonoBehaviour
     }
     public void generateOctahedra()
     {
-        octahedraArray = new GameObject[dimensions-1];
+        //used to be dimensions
+        octahedraArray = new GameObject[2];
 
         XatomCoords = new Vector3[]{
             new Vector3(0, -unit, 0),
@@ -102,7 +112,7 @@ public class generateAtoms : MonoBehaviour
             new Vector3(-unit, 0, 0),
             new Vector3(0, 0, -unit)
         };
-        BatomCoords = new Vector3[]
+        AatomCoords = new Vector3[]
         {
             new Vector3(-unit,unit,unit),
             new Vector3(unit,unit,unit),
@@ -115,43 +125,55 @@ public class generateAtoms : MonoBehaviour
         };
         for (int m = 0; m < octahedraArray.Length; m++)
         {
+            Debug.Log(m);
+            octahedraArray[m] = new GameObject("Octahedra " + (m ));
 
-            octahedraArray[m] = new GameObject("Octahedra" + (m + 1));
-
-            for (int i = 0; i < BatomsArray.Length; i++)
+            for (int i = 0; i < AatomsArray.Length; i++)
             {
-                BatomCoords[i] += new Vector3(transformX, transformY, transformZ);
+                AatomCoords[i] += new Vector3(transformX, transformY, transformZ);
 
 
                 //make the actual sphere
-                BatomsArray[i] = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                AatomsArray[i] = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                AatomsArray[i].name = "A " + (i+1);
 
-                BatomsArray[i].transform.position = BatomCoords[i];
+                AatomsArray[i].transform.position = AatomCoords[i];
                 //radius
-                BatomsArray[i].transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                AatomsArray[i].transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 
-                //make octahedra the parent of the X atoms
-                BatomsArray[i].transform.parent = octahedraArray[m].transform;
-                BatomsArray[i].GetComponent<Renderer>().material.color = Color.white;
+                //make octahedra the parent of the A atoms
+                //AatomsArray[i].transform.parent = octahedraArray[m].transform;
+                AatomsArray[i].transform.parent = gameObject.transform;
+                AatomsArray[i].GetComponent<Renderer>().material.color = AatomsColor;
                 if (i < XatomsArray.Length)
                 {
                     XatomCoords[i] += new Vector3(transformX, transformY, transformZ);
-                    
+
 
                     //make the actual sphere
                     XatomsArray[i] = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-
+                    XatomsArray[i].name = "X " + (i + 1);
                     XatomsArray[i].transform.position = XatomCoords[i];
                     //radius
-                    XatomsArray[i].transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                    XatomsArray[i].transform.localScale = new Vector3(XatomsRadius, XatomsRadius, XatomsRadius);
 
                     //make octahedra the parent of the X atoms
                     XatomsArray[i].transform.parent = octahedraArray[m].transform;
                     octahedraArray[m].transform.parent = gameObject.transform;
-                    XatomsArray[i].GetComponent<Renderer>().material.color = Color.green;
+                    XatomsArray[i].GetComponent<Renderer>().material.color = XatomsColor;
+
+                    //COLLIDERS??!?
+                    //XatomsArray[i].AddComponent<Collider>();
+                    XatomsArray[i].GetComponent<Collider>().enabled = false;
+                    XatomsArray[i].AddComponent<Rigidbody>();
+                    XatomsArray[i].GetComponent<Rigidbody>().useGravity = false;
                 }
-                
+
             }
+            //configure settings for B atom
+            XatomsArray[4].name = "B";
+            XatomsArray[4].transform.localScale = new Vector3(BatomsRadius, BatomsRadius, BatomsRadius);
+            XatomsArray[4].GetComponent<Renderer>().material.color = BatomsColor;
             meshVerts = new Vector3[][]{
                 new Vector3[3] { XatomCoords[0], XatomCoords[2], XatomCoords[3] },
                 new Vector3[3] { XatomCoords[6], XatomCoords[1], XatomCoords[2] },
@@ -203,9 +225,24 @@ public class generateAtoms : MonoBehaviour
 
                 planeArray[j].transform.parent = octahedraArray[m].transform;
             }
+            transformX = 2;
+
+            octahedraArray[m].AddComponent<Rigidbody>();
+            octahedraArray[m].GetComponent<Rigidbody>().useGravity = false;
 
         }
-        //remember to transform parent-child relationships
+        XatomsArray[3].AddComponent<Joint>();
+        XatomsArray[3].GetComponent<Joint>().anchor = XatomsArray[3].transform.position;
+        //XatomsArray[3].GetComponent<Joint>().connectedBody
+        //Physics.IgnoreCollision(octahedraArray[0].GetComponent<Collider>(), octahedraArray[1].GetComponent<Collider>());
+        //octCounter++;
+        //resetTransforms();
+        //octahedraArray[0].transform.Rotate(Vector3.up * 30, Space.World);
+        //octahedraArray[1].transform.Rotate(Vector3.up * -30, Space.World);
+    }
+    public void rotate(GameObject oct)
+    {
+        oct.transform.Rotate(Vector3.up * Time.deltaTime*10, Space.World);
     }
     public void reverseTriIndex(int[] a)
     {
