@@ -231,14 +231,20 @@ public class generateAtoms : MonoBehaviour
             octahedraArray[m].GetComponent<Rigidbody>().useGravity = false;
 
         }
+        /*
         XatomsArray[3].AddComponent<Joint>();
-        XatomsArray[3].GetComponent<Joint>().anchor = XatomsArray[3].transform.position;
+        XatomsArray[3].GetComponent<Joint>().anchor = XatomsArray[3].transform.position;*/
         //XatomsArray[3].GetComponent<Joint>().connectedBody
         //Physics.IgnoreCollision(octahedraArray[0].GetComponent<Collider>(), octahedraArray[1].GetComponent<Collider>());
         //octCounter++;
         //resetTransforms();
-        //octahedraArray[0].transform.Rotate(Vector3.up * 30, Space.World);
-        //octahedraArray[1].transform.Rotate(Vector3.up * -30, Space.World);
+        
+        //octahedraArray[1].transform.Rotate(0, 0, -30, Space.Self);
+    }
+    void Update()
+    {
+        octahedraArray[0].transform.Rotate(Vector3.back, Time.deltaTime*4, Space.Self);
+        octahedraArray[1].transform.Rotate(/*.forward*/XatomsArray[4].transform.forward, Time.deltaTime * 4, Space.Self);
     }
     public void rotate(GameObject oct)
     {
