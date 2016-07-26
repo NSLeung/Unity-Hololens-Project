@@ -7,7 +7,7 @@ public class generateAtoms : MonoBehaviour
     public int dimensions = 1;
 
 
-    private GameObject[] octahedraArray;
+    private GameObject[] octahedraArray = new GameObject[2];
     private GameObject[] AatomsArray = new GameObject[8];
     private GameObject[] XatomsArray = new GameObject[7];
     private GameObject[] BatomsArray = new GameObject[8];
@@ -15,10 +15,10 @@ public class generateAtoms : MonoBehaviour
     private float XatomsRadius = 0.25f;
     private float BatomsRadius = 0.5f;
     public Color XatomsColor = Color.red;
-    private Color BatomsColor = Color.blue;
-    private Color AatomsColor = Color.white;
+    public Color BatomsColor = Color.blue;
+    public Color AatomsColor = Color.white;
 
-    public Vector3[] XatomCoords = new Vector3[7];
+    private Vector3[] XatomCoords = new Vector3[7];
     private Vector3[] AatomCoords = new Vector3[8];
 
     private Vector3[][] meshVerts = new Vector3[8][];
@@ -34,12 +34,12 @@ public class generateAtoms : MonoBehaviour
     private GameObject[] planeArrayCopy = new GameObject[8];
     public float planeTransparency = 0.3f;
 
-    MeshFilter filter;
-    MeshRenderer renderer2;
+    private MeshFilter filter;
+    private MeshRenderer renderer2;
 
-    private int octCounter = 1;
+    //private int octCounter = 1;
 
-    private GameObject Batom = new GameObject("B");
+    //private GameObject Batom = new GameObject("B");
     void Start()
     {
         generateOctahedra();
@@ -101,7 +101,7 @@ public class generateAtoms : MonoBehaviour
     public void generateOctahedra()
     {
         //used to be dimensions
-        octahedraArray = new GameObject[2];
+        //octahedraArray = new GameObject[2];
 
         XatomCoords = new Vector3[]{
             new Vector3(0, -unit, 0),
@@ -145,6 +145,9 @@ public class generateAtoms : MonoBehaviour
                 //AatomsArray[i].transform.parent = octahedraArray[m].transform;
                 AatomsArray[i].transform.parent = gameObject.transform;
                 AatomsArray[i].GetComponent<Renderer>().material.color = AatomsColor;
+
+                //add interactible script
+                AatomsArray[i].AddComponent <Interactible>();
                 if (i < XatomsArray.Length)
                 {
                     XatomCoords[i] += new Vector3(transformX, transformY, transformZ);
@@ -167,13 +170,17 @@ public class generateAtoms : MonoBehaviour
                     XatomsArray[i].GetComponent<Collider>().enabled = false;
                     XatomsArray[i].AddComponent<Rigidbody>();
                     XatomsArray[i].GetComponent<Rigidbody>().useGravity = false;
+
+                    //add interactible script
+                    XatomsArray[i].AddComponent<Interactible>();
                 }
 
             }
-            //configure settings for B atom
+            //configure settings for B atom (center)
             XatomsArray[4].name = "B";
             XatomsArray[4].transform.localScale = new Vector3(BatomsRadius, BatomsRadius, BatomsRadius);
             XatomsArray[4].GetComponent<Renderer>().material.color = BatomsColor;
+
             meshVerts = new Vector3[][]{
                 new Vector3[3] { XatomCoords[0], XatomCoords[2], XatomCoords[3] },
                 new Vector3[3] { XatomCoords[6], XatomCoords[1], XatomCoords[2] },
@@ -232,6 +239,7 @@ public class generateAtoms : MonoBehaviour
 
         }
         /*
+         * joint thing
         XatomsArray[3].AddComponent<Joint>();
         XatomsArray[3].GetComponent<Joint>().anchor = XatomsArray[3].transform.position;*/
         //XatomsArray[3].GetComponent<Joint>().connectedBody
@@ -244,7 +252,7 @@ public class generateAtoms : MonoBehaviour
     void Update()
     {
         octahedraArray[0].transform.Rotate(Vector3.back, Time.deltaTime*4, Space.Self);
-        octahedraArray[1].transform.Rotate(/*.forward*/XatomsArray[4].transform.forward, Time.deltaTime * 4, Space.Self);
+        octahedraArray[1].transform.RotateAround(/*.forward*/XatomsArray[4].transform.position,Vector3.forward, Time.deltaTime * 4);
     }
     public void rotate(GameObject oct)
     {
@@ -256,5 +264,9 @@ public class generateAtoms : MonoBehaviour
         temp = a[0];
         a[0] = a[1];
         a[1] = temp;
+    }
+    public void unitCellSelected()
+    {
+
     }
 }
