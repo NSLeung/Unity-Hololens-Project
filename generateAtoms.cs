@@ -1,19 +1,19 @@
 using UnityEngine;
 
 
-public class generateAtoms : MonoBehaviour
+public class GenerateAtoms : MonoBehaviour
 {
     [Tooltip("The perovskite structure will be x unit cells by x unit cells")]
     public int dimensions = 1;
 
-
+    //change to 1 when making 2by2
     private GameObject[] octahedraArray = new GameObject[2];
     private GameObject[] AatomsArray = new GameObject[8];
     private GameObject[] XatomsArray = new GameObject[7];
     private GameObject[] BatomsArray = new GameObject[8];
 
     private float XatomsRadius = 0.25f;
-    private float BatomsRadius = 0.5f;
+    private float BatomsRadius = 0.7f;
     public Color XatomsColor = Color.red;
     public Color BatomsColor = Color.blue;
     public Color AatomsColor = Color.white;
@@ -22,9 +22,9 @@ public class generateAtoms : MonoBehaviour
     private Vector3[] AatomCoords = new Vector3[8];
 
     private Vector3[][] meshVerts = new Vector3[8][];
-    private Mesh mesh = new Mesh();
+    private Mesh mesh;/* = new Mesh();*/
 
-    private int unit = 1;
+    public int unit = 1;
 
     public float transformX = 0;
     public float transformY = 0;
@@ -47,15 +47,15 @@ public class generateAtoms : MonoBehaviour
     }
     public void dimensionGenerator()
     {
-
+        /*
         for (int w = 0; w < dimensions; w++)
-        {
-            /*
+        {*/
+            //MOVE THIS CODE DOWN WHERE TRANSFORM X = 2 IS
             //x+=2
             transformX += 2;
             generateOctahedra();
             resetTransforms();
-            /*
+            
             //z+=2
             transformZ += 2;
             generateOctahedra();
@@ -89,8 +89,8 @@ public class generateAtoms : MonoBehaviour
             transformZ += 2;
             generateOctahedra();
             resetTransforms();
-            */
-        }
+            
+        //}
     }
     public void resetTransforms()
     {
@@ -100,6 +100,7 @@ public class generateAtoms : MonoBehaviour
     }
     public void generateOctahedra()
     {
+        mesh = new Mesh();
         //used to be dimensions
         //octahedraArray = new GameObject[2];
 
@@ -126,7 +127,7 @@ public class generateAtoms : MonoBehaviour
         for (int m = 0; m < octahedraArray.Length; m++)
         {
             Debug.Log(m);
-            octahedraArray[m] = new GameObject("Octahedra " + (m ));
+            octahedraArray[m] = new GameObject("Octahedra " + (m));
 
             for (int i = 0; i < AatomsArray.Length; i++)
             {
@@ -135,7 +136,7 @@ public class generateAtoms : MonoBehaviour
 
                 //make the actual sphere
                 AatomsArray[i] = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                AatomsArray[i].name = "A " + (i+1);
+                AatomsArray[i].name = "A " + (i + 1);
 
                 AatomsArray[i].transform.position = AatomCoords[i];
                 //radius
@@ -147,7 +148,7 @@ public class generateAtoms : MonoBehaviour
                 AatomsArray[i].GetComponent<Renderer>().material.color = AatomsColor;
 
                 //add interactible script
-                AatomsArray[i].AddComponent <Interactible>();
+                AatomsArray[i].AddComponent<Interactible>();
                 if (i < XatomsArray.Length)
                 {
                     XatomCoords[i] += new Vector3(transformX, transformY, transformZ);
@@ -234,8 +235,8 @@ public class generateAtoms : MonoBehaviour
             }
             transformX = 2;
 
-            octahedraArray[m].AddComponent<Rigidbody>();
-            octahedraArray[m].GetComponent<Rigidbody>().useGravity = false;
+            //octahedraArray[m].AddComponent<Rigidbody>();
+            //octahedraArray[m].GetComponent<Rigidbody>().useGravity = false;
 
         }
         /*
@@ -246,17 +247,25 @@ public class generateAtoms : MonoBehaviour
         //Physics.IgnoreCollision(octahedraArray[0].GetComponent<Collider>(), octahedraArray[1].GetComponent<Collider>());
         //octCounter++;
         //resetTransforms();
-        
+
+        //legit transform here
+        octahedraArray[0].transform.Rotate(Vector3.back, /*Time.deltaTime */ 10, Space.Self);
+        octahedraArray[0].transform.Rotate(Vector3.right, /*Time.deltaTime */ 10, Space.Self);
+
         //octahedraArray[1].transform.Rotate(0, 0, -30, Space.Self);
+
+        //legit transform here
+        octahedraArray[1].transform.RotateAround(XatomsArray[4].transform.position, Vector3.forward, 10);
+        octahedraArray[1].transform.RotateAround(XatomsArray[4].transform.position, Vector3.right, 10);
     }
     void Update()
     {
-        octahedraArray[0].transform.Rotate(Vector3.back, Time.deltaTime*4, Space.Self);
-        octahedraArray[1].transform.RotateAround(/*.forward*/XatomsArray[4].transform.position,Vector3.forward, Time.deltaTime * 4);
+        //octahedraArray[0].transform.Rotate(Vector3.back, Time.deltaTime * 4, Space.Self);
+        //octahedraArray[1].transform.RotateAround(/*.forward*/XatomsArray[4].transform.position, Vector3.forward, Time.deltaTime * 4);
     }
     public void rotate(GameObject oct)
     {
-        oct.transform.Rotate(Vector3.up * Time.deltaTime*10, Space.World);
+        oct.transform.Rotate(Vector3.up * Time.deltaTime * 10, Space.World);
     }
     public void reverseTriIndex(int[] a)
     {
