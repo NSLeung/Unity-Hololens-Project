@@ -7,7 +7,7 @@ public class GenerateAtoms : MonoBehaviour
     public int dimensions = 1;
 
     //change to 1 when making 2by2
-    private GameObject[] octahedraArray = new GameObject[2];
+    private GameObject[] octahedraArray = new GameObject[4];
     private GameObject[] AatomsArray = new GameObject[8];
     private GameObject[] XatomsArray = new GameObject[7];
     private GameObject[] BatomsArray = new GameObject[8];
@@ -26,9 +26,9 @@ public class GenerateAtoms : MonoBehaviour
 
     public int unit = 1;
 
-    public float transformX = 0;
-    public float transformY = 0;
-    public float transformZ = 0;
+    private float transformX = 0;
+    private float transformY = 0;
+    private float transformZ = 0;
 
     private GameObject[] planeArray = new GameObject[8];
     private GameObject[] planeArrayCopy = new GameObject[8];
@@ -43,7 +43,7 @@ public class GenerateAtoms : MonoBehaviour
     void Start()
     {
         generateOctahedra();
-        dimensionGenerator();
+        //dimensionGenerator();
     }
     public void dimensionGenerator()
     {
@@ -126,11 +126,13 @@ public class GenerateAtoms : MonoBehaviour
         };
         for (int m = 0; m < octahedraArray.Length; m++)
         {
-            Debug.Log(m);
+            
             octahedraArray[m] = new GameObject("Octahedra " + (m));
 
             for (int i = 0; i < AatomsArray.Length; i++)
             {
+                Debug.Log("X: "+transformX);
+                Debug.Log("Z: " + transformZ);
                 AatomCoords[i] += new Vector3(transformX, transformY, transformZ);
 
 
@@ -177,6 +179,7 @@ public class GenerateAtoms : MonoBehaviour
                 }
 
             }
+            //resetTransforms();
             //configure settings for B atom (center)
             XatomsArray[4].name = "B";
             XatomsArray[4].transform.localScale = new Vector3(BatomsRadius, BatomsRadius, BatomsRadius);
@@ -233,7 +236,72 @@ public class GenerateAtoms : MonoBehaviour
 
                 planeArray[j].transform.parent = octahedraArray[m].transform;
             }
-            transformX = 2;
+            //if(m==1)
+            //transformX = 2;
+            ///HERE BEGINS THE TRANSFORMING
+            switch (m)
+            {
+                case 0:
+                    //Debug.Log("WEF WEF EW");
+                //x+=2
+                transformX += 2;
+                    
+                ////generateOctahedra();
+                //resetTransforms();
+                break;
+
+                case 1:
+                    //z+=2
+                    
+                    resetTransforms();
+                    transformX -= 2;
+                    transformZ += 2;
+                //generateOctahedra();
+                //resetTransforms();
+                    break;
+                case 2:
+                    //x, z+=2
+                    resetTransforms();
+                    //transformZ -= 2;
+                    transformX += 2;
+                //transformZ += 2;
+                //generateOctahedra();
+                //resetTransforms();
+                    break;
+                case 3:
+                //y+=2
+                transformY += 2;
+                //generateOctahedra();
+                //resetTransforms();
+                    break;
+
+                case 4:
+
+                //y+=2, x+=2
+                transformY += 2;
+                transformX += 2;
+                //generateOctahedra();
+                //resetTransforms();
+                    break;
+                case 5:
+                //y+=2, z+=2
+                transformY += 2;
+                transformZ += 2;
+                //generateOctahedra();
+                //resetTransforms();
+                    break;
+                case 6:
+
+                //x, z+=2, y+=2
+                transformY += 2;
+                transformX += 2;
+                transformZ += 2;
+                //generateOctahedra();
+                //resetTransforms();
+                    break;
+                //default: break;
+        }
+            
 
             //octahedraArray[m].AddComponent<Rigidbody>();
             //octahedraArray[m].GetComponent<Rigidbody>().useGravity = false;
@@ -249,14 +317,14 @@ public class GenerateAtoms : MonoBehaviour
         //resetTransforms();
 
         //legit transform here
-        octahedraArray[0].transform.Rotate(Vector3.back, /*Time.deltaTime */ 10, Space.Self);
-        octahedraArray[0].transform.Rotate(Vector3.right, /*Time.deltaTime */ 10, Space.Self);
+        //octahedraArray[0].transform.Rotate(Vector3.back, /*Time.deltaTime */ 10, Space.Self);
+        //octahedraArray[0].transform.Rotate(Vector3.right, /*Time.deltaTime */ 10, Space.Self);
 
         //octahedraArray[1].transform.Rotate(0, 0, -30, Space.Self);
 
         //legit transform here
-        octahedraArray[1].transform.RotateAround(XatomsArray[4].transform.position, Vector3.forward, 10);
-        octahedraArray[1].transform.RotateAround(XatomsArray[4].transform.position, Vector3.right, 10);
+        //octahedraArray[1].transform.RotateAround(XatomsArray[4].transform.position, Vector3.forward, 10);
+        //octahedraArray[1].transform.RotateAround(XatomsArray[4].transform.position, Vector3.right, 10);
     }
     void Update()
     {
