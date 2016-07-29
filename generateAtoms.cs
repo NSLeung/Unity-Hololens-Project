@@ -131,8 +131,8 @@ public class GenerateAtoms : MonoBehaviour
 
             for (int i = 0; i < AatomsArray.Length; i++)
             {
-                Debug.Log("X: "+transformX);
-                Debug.Log("Z: " + transformZ);
+                //Debug.Log("X: "+transformX);
+                //Debug.Log("Z: " + transformZ);
                 AatomCoords[i] += new Vector3(transformX, transformY, transformZ);
 
 
@@ -242,7 +242,7 @@ public class GenerateAtoms : MonoBehaviour
             switch (m)
             {
                 case 0:
-                    //Debug.Log("WEF WEF EW");
+                    ////Debug.Log("WEF WEF EW");
                 //x+=2
                 transformX += 2;
                     
@@ -327,14 +327,53 @@ public class GenerateAtoms : MonoBehaviour
         //resetTransforms();
 
         //legit transform here
-        //octahedraArray[0].transform.Rotate(Vector3.back, /*Time.deltaTime */ 10, Space.Self);
-        //octahedraArray[0].transform.Rotate(Vector3.right, /*Time.deltaTime */ 10, Space.Self);
-
+        //DELTA TIME IS ONLY FOR UPDATE FUNCTION?!?!?!
+        //octahedraArray[0].transform.Rotate(Vector3.back, /*Time.deltaTime */ 15, Space.Self);
+        //octahedraArray[0].transform.Rotate(Vector3.right, /*Time.deltaTime */ 15, Space.Self);
+        //for (int t = 0; t < octahedraArray.Length; t++)
+        //{
+        /*
+            ///a+a+c+
+         //   octahedraArray[0].transform.RotateAround(gameObject.transform.FindChild("Octahedra 0").FindChild("B").position, Vector3.back, 15);
+        //    octahedraArray[0].transform.RotateAround(gameObject.transform.FindChild("Octahedra 0").FindChild("B").position, Vector3.right, 15);
+            octahedraArray[0].transform.RotateAround(gameObject.transform.FindChild("Octahedra 0").FindChild("B").position, Vector3.up, 15);
         //octahedraArray[1].transform.Rotate(0, 0, -30, Space.Self);
 
-        //legit transform here
-        //octahedraArray[1].transform.RotateAround(XatomsArray[4].transform.position, Vector3.forward, 10);
-        //octahedraArray[1].transform.RotateAround(XatomsArray[4].transform.position, Vector3.right, 10);
+
+        //Debug.Log(gameObject.transform.FindChild("Octahedra 1").FindChild("B").name);
+
+        //THINK ABOUT AUTOMATING (THINK ABOUT GAMEOBJECT FIND CHILD WITH N?!???!
+       // octahedraArray[1].transform.RotateAround(gameObject.transform.FindChild("Octahedra 1").FindChild("B").position, Vector3.forward, 15);
+       //     octahedraArray[1].transform.RotateAround(gameObject.transform.FindChild("Octahedra 1").FindChild("B").position, Vector3.right, 15);
+        octahedraArray[1].transform.RotateAround(gameObject.transform.FindChild("Octahedra 1").FindChild("B").position, -Vector3.up, 15);
+
+       // octahedraArray[2].transform.RotateAround(gameObject.transform.FindChild("Octahedra 2").FindChild("B").position, Vector3.back, 15);
+       //     octahedraArray[2].transform.RotateAround(gameObject.transform.FindChild("Octahedra 2").FindChild("B").position, -Vector3.right, 15);
+        octahedraArray[2].transform.RotateAround(gameObject.transform.FindChild("Octahedra 2").FindChild("B").position, -Vector3.up, 15);
+
+      //  octahedraArray[3].transform.RotateAround(gameObject.transform.FindChild("Octahedra 3").FindChild("B").position, Vector3.forward, 15);
+      //      octahedraArray[3].transform.RotateAround(gameObject.transform.FindChild("Octahedra 3").FindChild("B").position, -Vector3.right, 15);
+        octahedraArray[3].transform.RotateAround(gameObject.transform.FindChild("Octahedra 3").FindChild("B").position, Vector3.up, 15);
+
+        //TOP LAYER
+      //  octahedraArray[4].transform.RotateAround(gameObject.transform.FindChild("Octahedra 4").FindChild("B").position, -Vector3.back, 15);
+       //     octahedraArray[4].transform.RotateAround(gameObject.transform.FindChild("Octahedra 4").FindChild("B").position, -Vector3.right, 15);
+        octahedraArray[4].transform.RotateAround(gameObject.transform.FindChild("Octahedra 4").FindChild("B").position, -Vector3.up, 15);
+
+      //  octahedraArray[5].transform.RotateAround(gameObject.transform.FindChild("Octahedra 5").FindChild("B").position, -Vector3.forward, 15);
+      //      octahedraArray[5].transform.RotateAround(gameObject.transform.FindChild("Octahedra 5").FindChild("B").position, -Vector3.right, 15);
+        octahedraArray[5].transform.RotateAround(gameObject.transform.FindChild("Octahedra 5").FindChild("B").position, Vector3.up, 15);
+
+       // octahedraArray[6].transform.RotateAround(gameObject.transform.FindChild("Octahedra 6").FindChild("B").position, -Vector3.back, 15);
+      //      octahedraArray[6].transform.RotateAround(gameObject.transform.FindChild("Octahedra 6").FindChild("B").position, Vector3.right, 15);
+        octahedraArray[6].transform.RotateAround(gameObject.transform.FindChild("Octahedra 6").FindChild("B").position, Vector3.right, 15);
+
+      //  octahedraArray[7].transform.RotateAround(gameObject.transform.FindChild("Octahedra 7").FindChild("B").position, -Vector3.forward, 15);
+       //     octahedraArray[7].transform.RotateAround(gameObject.transform.FindChild("Octahedra 7").FindChild("B").position, Vector3.right, 15);
+        octahedraArray[7].transform.RotateAround(gameObject.transform.FindChild("Octahedra 7").FindChild("B").position, -Vector3.right, 15);
+        */
+
+        //}
     }
     void Update()
     {
