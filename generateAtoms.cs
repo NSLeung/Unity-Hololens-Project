@@ -7,7 +7,7 @@ public class GenerateAtoms : MonoBehaviour
     public int dimensions = 1;
 
     //change to 1 when making 2by2
-    private GameObject[] octahedraArray = new GameObject[4];
+    private GameObject[] octahedraArray = new GameObject[8];
     private GameObject[] AatomsArray = new GameObject[8];
     private GameObject[] XatomsArray = new GameObject[7];
     private GameObject[] BatomsArray = new GameObject[8];
@@ -264,12 +264,16 @@ public class GenerateAtoms : MonoBehaviour
                     resetTransforms();
                     //transformZ -= 2;
                     transformX += 2;
+                    //keep the transformZ from last case (1)
                 //transformZ += 2;
                 //generateOctahedra();
                 //resetTransforms();
                     break;
                 case 3:
-                //y+=2
+                    //y+=2
+                    resetTransforms();
+                    transformX -= 2;
+                    transformZ -= 2;
                 transformY += 2;
                 //generateOctahedra();
                 //resetTransforms();
@@ -277,25 +281,31 @@ public class GenerateAtoms : MonoBehaviour
 
                 case 4:
 
-                //y+=2, x+=2
-                transformY += 2;
+                    //y+=2, x+=2
+                    resetTransforms();
+                //transformY += 2;
                 transformX += 2;
                 //generateOctahedra();
                 //resetTransforms();
                     break;
                 case 5:
                 //y+=2, z+=2
-                transformY += 2;
-                transformZ += 2;
-                //generateOctahedra();
-                //resetTransforms();
+                //transformY += 2;
+                
+                    resetTransforms();
+                    transformX -= 2;
+                    transformZ += 2;
+                    //generateOctahedra();
+                    //resetTransforms();
                     break;
                 case 6:
 
-                //x, z+=2, y+=2
-                transformY += 2;
+                    //x, z+=2, y+=2
+                    //transformY += 2;
+                    resetTransforms();
                 transformX += 2;
-                transformZ += 2;
+                    //resetTransforms();
+                //transformZ += 2;
                 //generateOctahedra();
                 //resetTransforms();
                     break;
