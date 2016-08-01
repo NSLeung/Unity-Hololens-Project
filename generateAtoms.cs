@@ -4,10 +4,11 @@ using UnityEngine;
 public class GenerateAtoms : MonoBehaviour
 {
     [Tooltip("The perovskite structure will be x unit cells by x unit cells")]
-    public int dimensions = 1;
+    private int dimensions = 1;
 
     //change to 1 when making 2by2
-    private GameObject[] octahedraArray = new GameObject[8];
+    private GameObject[] octahedraArray /*= new GameObject[8]*/;
+    private GameObject[] perovskiteUnitCell;
     private GameObject[] AatomsArray = new GameObject[8];
     private GameObject[] XatomsArray = new GameObject[7];
     private GameObject[] BatomsArray = new GameObject[8];
@@ -37,72 +38,28 @@ public class GenerateAtoms : MonoBehaviour
     private MeshFilter filter;
     private MeshRenderer renderer2;
 
+    public GameObject SelectedCubeCage;
     //private int octCounter = 1;
 
     //private GameObject Batom = new GameObject("B");
     void Start()
     {
-        generateOctahedra();
-        //dimensionGenerator();
+        octahedraArray = new GameObject[dimensions*dimensions*dimensions];
+        perovskiteUnitCell = new GameObject[dimensions * dimensions * dimensions];
+        generatePerovskite();
     }
-    public void dimensionGenerator()
-    {
-        /*
-        for (int w = 0; w < dimensions; w++)
-        {*/
-            //MOVE THIS CODE DOWN WHERE TRANSFORM X = 2 IS
-            //x+=2
-            transformX += 2;
-            generateOctahedra();
-            resetTransforms();
-            
-            //z+=2
-            transformZ += 2;
-            generateOctahedra();
-            resetTransforms();
-
-            //x, z+=2
-            transformX += 2;
-            transformZ += 2;
-            generateOctahedra();
-            resetTransforms();
-
-            //y+=2
-            transformY += 2;
-            generateOctahedra();
-            resetTransforms();
-
-            //y+=2, x+=2
-            transformY += 2;
-            transformX += 2;
-            generateOctahedra();
-            resetTransforms();
-            //y+=2, z+=2
-            transformY += 2;
-            transformZ += 2;
-            generateOctahedra();
-            resetTransforms();
-
-            //x, z+=2, y+=2
-            transformY += 2;
-            transformX += 2;
-            transformZ += 2;
-            generateOctahedra();
-            resetTransforms();
-            
-        //}
-    }
+   
     public void resetTransforms()
     {
         transformX = 0;
         transformY = 0;
         transformZ = 0;
     }
-    public void generateOctahedra()
+    public void generatePerovskite()
     {
         mesh = new Mesh();
-        //used to be dimensions
-        //octahedraArray = new GameObject[2];
+
+
 
         XatomCoords = new Vector3[]{
             new Vector3(0, -unit, 0),
@@ -128,6 +85,7 @@ public class GenerateAtoms : MonoBehaviour
         {
             
             octahedraArray[m] = new GameObject("Octahedra " + (m));
+            perovskiteUnitCell[m] = new GameObject("Perovskite Unit Cell " + (m));
 
             for (int i = 0; i < AatomsArray.Length; i++)
             {
@@ -146,7 +104,7 @@ public class GenerateAtoms : MonoBehaviour
 
                 //make octahedra the parent of the A atoms
                 //AatomsArray[i].transform.parent = octahedraArray[m].transform;
-                AatomsArray[i].transform.parent = gameObject.transform;
+                AatomsArray[i].transform.parent = perovskiteUnitCell[m].transform;
                 AatomsArray[i].GetComponent<Renderer>().material.color = AatomsColor;
 
                 //add interactible script
@@ -165,15 +123,18 @@ public class GenerateAtoms : MonoBehaviour
 
                     //make octahedra the parent of the X atoms
                     XatomsArray[i].transform.parent = octahedraArray[m].transform;
-                    octahedraArray[m].transform.parent = gameObject.transform;
+                    octahedraArray[m].transform.parent = perovskiteUnitCell[m].transform;
+                    perovskiteUnitCell[m].transform.parent = gameObject.transform;
+
                     XatomsArray[i].GetComponent<Renderer>().material.color = XatomsColor;
 
+                    /*
                     //COLLIDERS??!?
                     //XatomsArray[i].AddComponent<Collider>();
                     XatomsArray[i].GetComponent<Collider>().enabled = false;
                     XatomsArray[i].AddComponent<Rigidbody>();
                     XatomsArray[i].GetComponent<Rigidbody>().useGravity = false;
-
+                    */
                     //add interactible script
                     XatomsArray[i].AddComponent<Interactible>();
                 }
@@ -313,18 +274,10 @@ public class GenerateAtoms : MonoBehaviour
         }
             
 
-            //octahedraArray[m].AddComponent<Rigidbody>();
-            //octahedraArray[m].GetComponent<Rigidbody>().useGravity = false;
+            
 
         }
-        /*
-         * joint thing
-        XatomsArray[3].AddComponent<Joint>();
-        XatomsArray[3].GetComponent<Joint>().anchor = XatomsArray[3].transform.position;*/
-        //XatomsArray[3].GetComponent<Joint>().connectedBody
-        //Physics.IgnoreCollision(octahedraArray[0].GetComponent<Collider>(), octahedraArray[1].GetComponent<Collider>());
-        //octCounter++;
-        //resetTransforms();
+        
 
         //legit transform here
         //DELTA TIME IS ONLY FOR UPDATE FUNCTION?!?!?!
@@ -332,46 +285,48 @@ public class GenerateAtoms : MonoBehaviour
         //octahedraArray[0].transform.Rotate(Vector3.right, /*Time.deltaTime */ 15, Space.Self);
         //for (int t = 0; t < octahedraArray.Length; t++)
         //{
-        /*
+        
             ///a+a+c+
          //   octahedraArray[0].transform.RotateAround(gameObject.transform.FindChild("Octahedra 0").FindChild("B").position, Vector3.back, 15);
         //    octahedraArray[0].transform.RotateAround(gameObject.transform.FindChild("Octahedra 0").FindChild("B").position, Vector3.right, 15);
-            octahedraArray[0].transform.RotateAround(gameObject.transform.FindChild("Octahedra 0").FindChild("B").position, Vector3.up, 15);
-        //octahedraArray[1].transform.Rotate(0, 0, -30, Space.Self);
+         //   octahedraArray[0].transform.RotateAround(gameObject.transform.FindChild("Perovskite Unit Cell 0").FindChild("Octahedra 0").FindChild("B").position, Vector3.up, 15);
+         //use this as template pl0x
+        octahedraArray[0].transform.RotateAround(gameObject.transform.FindChild(perovskiteUnitCell[0].name).FindChild(octahedraArray[0].name).FindChild("B").position, Vector3.up, 15);
+        
 
 
         //Debug.Log(gameObject.transform.FindChild("Octahedra 1").FindChild("B").name);
 
         //THINK ABOUT AUTOMATING (THINK ABOUT GAMEOBJECT FIND CHILD WITH N?!???!
-       // octahedraArray[1].transform.RotateAround(gameObject.transform.FindChild("Octahedra 1").FindChild("B").position, Vector3.forward, 15);
-       //     octahedraArray[1].transform.RotateAround(gameObject.transform.FindChild("Octahedra 1").FindChild("B").position, Vector3.right, 15);
-        octahedraArray[1].transform.RotateAround(gameObject.transform.FindChild("Octahedra 1").FindChild("B").position, -Vector3.up, 15);
+        // octahedraArray[1].transform.RotateAround(gameObject.transform.FindChild("Octahedra 1").FindChild("B").position, Vector3.forward, 15);
+        //     octahedraArray[1].transform.RotateAround(gameObject.transform.FindChild("Octahedra 1").FindChild("B").position, Vector3.right, 15);
+        //octahedraArray[1].transform.RotateAround(gameObject.transform.FindChild("Perovskite Unit Cell 1").FindChild("Octahedra 1").FindChild("B").position, -Vector3.up, 15);
 
        // octahedraArray[2].transform.RotateAround(gameObject.transform.FindChild("Octahedra 2").FindChild("B").position, Vector3.back, 15);
        //     octahedraArray[2].transform.RotateAround(gameObject.transform.FindChild("Octahedra 2").FindChild("B").position, -Vector3.right, 15);
-        octahedraArray[2].transform.RotateAround(gameObject.transform.FindChild("Octahedra 2").FindChild("B").position, -Vector3.up, 15);
+        //octahedraArray[2].transform.RotateAround(gameObject.transform.FindChild("Octahedra 2").FindChild("B").position, -Vector3.up, 15);
 
       //  octahedraArray[3].transform.RotateAround(gameObject.transform.FindChild("Octahedra 3").FindChild("B").position, Vector3.forward, 15);
       //      octahedraArray[3].transform.RotateAround(gameObject.transform.FindChild("Octahedra 3").FindChild("B").position, -Vector3.right, 15);
-        octahedraArray[3].transform.RotateAround(gameObject.transform.FindChild("Octahedra 3").FindChild("B").position, Vector3.up, 15);
+       // octahedraArray[3].transform.RotateAround(gameObject.transform.FindChild("Octahedra 3").FindChild("B").position, Vector3.up, 15);
 
         //TOP LAYER
       //  octahedraArray[4].transform.RotateAround(gameObject.transform.FindChild("Octahedra 4").FindChild("B").position, -Vector3.back, 15);
        //     octahedraArray[4].transform.RotateAround(gameObject.transform.FindChild("Octahedra 4").FindChild("B").position, -Vector3.right, 15);
-        octahedraArray[4].transform.RotateAround(gameObject.transform.FindChild("Octahedra 4").FindChild("B").position, -Vector3.up, 15);
+      //  octahedraArray[4].transform.RotateAround(gameObject.transform.FindChild("Octahedra 4").FindChild("B").position, -Vector3.up, 15);
 
       //  octahedraArray[5].transform.RotateAround(gameObject.transform.FindChild("Octahedra 5").FindChild("B").position, -Vector3.forward, 15);
       //      octahedraArray[5].transform.RotateAround(gameObject.transform.FindChild("Octahedra 5").FindChild("B").position, -Vector3.right, 15);
-        octahedraArray[5].transform.RotateAround(gameObject.transform.FindChild("Octahedra 5").FindChild("B").position, Vector3.up, 15);
+      //  octahedraArray[5].transform.RotateAround(gameObject.transform.FindChild("Octahedra 5").FindChild("B").position, Vector3.up, 15);
 
        // octahedraArray[6].transform.RotateAround(gameObject.transform.FindChild("Octahedra 6").FindChild("B").position, -Vector3.back, 15);
       //      octahedraArray[6].transform.RotateAround(gameObject.transform.FindChild("Octahedra 6").FindChild("B").position, Vector3.right, 15);
-        octahedraArray[6].transform.RotateAround(gameObject.transform.FindChild("Octahedra 6").FindChild("B").position, Vector3.right, 15);
+      //  octahedraArray[6].transform.RotateAround(gameObject.transform.FindChild("Octahedra 6").FindChild("B").position, Vector3.right, 15);
 
       //  octahedraArray[7].transform.RotateAround(gameObject.transform.FindChild("Octahedra 7").FindChild("B").position, -Vector3.forward, 15);
        //     octahedraArray[7].transform.RotateAround(gameObject.transform.FindChild("Octahedra 7").FindChild("B").position, Vector3.right, 15);
-        octahedraArray[7].transform.RotateAround(gameObject.transform.FindChild("Octahedra 7").FindChild("B").position, -Vector3.right, 15);
-        */
+      //  octahedraArray[7].transform.RotateAround(gameObject.transform.FindChild("Octahedra 7").FindChild("B").position, -Vector3.right, 15);
+        
 
         //}
     }
@@ -391,8 +346,23 @@ public class GenerateAtoms : MonoBehaviour
         a[0] = a[1];
         a[1] = temp;
     }
-    public void unitCellSelected()
+    public void unitCellSelected(/*GameObject obj*/)
     {
+        //Material mat = obj.GetComponent<Renderer>().material;
+        //mat.color = Color.red;
+        Debug.Log("asdf");
+        SelectedCubeCage = new GameObject("Selected");
+        SelectedCubeCage = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        //GameObject parent = GameObject.Find(parentObjName);
+        //XatomsArray[i].transform.position = XatomCoords[i];
+        //radius
+        //XatomsArray[i].transform.localScale = new Vector3(XatomsRadius, XatomsRadius, XatomsRadius);
 
+        //make octahedra the parent of the X atoms
+        //XatomsArray[i].transform.parent = octahedraArray[m].transform;
+        //octahedraArray[m].transform.parent = perovskiteUnitCell[m].transform;
+        //perovskiteUnitCell[m].transform.parent = gameObject.transform;
+
+        //XatomsArray[i].GetComponent<Renderer>().material.color = XatomsColor;
     }
 }
