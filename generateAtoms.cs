@@ -1,5 +1,6 @@
+using System.Collections;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public class GenerateAtoms : MonoBehaviour
 {
@@ -40,15 +41,39 @@ public class GenerateAtoms : MonoBehaviour
 
     public GameObject SelectedCubeCage;
     //private int octCounter = 1;
+    public Slider slider;
+    public float sliderValue;
 
+    public bool rotating= true;
     //private GameObject Batom = new GameObject("B");
     void Start()
     {
-        octahedraArray = new GameObject[dimensions*dimensions*dimensions];
-        perovskiteUnitCell = new GameObject[dimensions * dimensions * dimensions];
+        octahedraArray = new GameObject[/*dimensions*dimensions*dimensions*/2];
+        perovskiteUnitCell = new GameObject[/*dimensions*dimensions*dimensions*/2];
+        sliderValue = slider.value;
         generatePerovskite();
     }
-   
+   void Update()
+    {
+        sliderValue = slider.value;
+        //rotateAround();
+        
+            
+        StartCoroutine(RotateMe(Vector3.right * sliderValue));
+        
+    }
+    //octahedraArray[0].transform.RotateAround(gameObject.transform.FindChild(perovskiteUnitCell[0].name).FindChild(octahedraArray[0].name).FindChild("B").position, Vector3.up, sliderValue);
+    //THIS IS THE COROUTINE FOR ROTATING???!
+    IEnumerator RotateMe(Vector3 byAngles)
+    {
+        var fromAngle = transform.rotation;
+        var toAngle = Quaternion.Euler(transform.eulerAngles + byAngles);
+        
+            octahedraArray[1].transform.rotation = Quaternion.Lerp(fromAngle, toAngle, 1f);
+            yield return null;
+        
+    }
+
     public void resetTransforms()
     {
         transformX = 0;
@@ -57,6 +82,7 @@ public class GenerateAtoms : MonoBehaviour
     }
     public void generatePerovskite()
     {
+        
         mesh = new Mesh();
 
 
@@ -200,7 +226,7 @@ public class GenerateAtoms : MonoBehaviour
             //if(m==1)
             //transformX = 2;
             ///HERE BEGINS THE TRANSFORMING
-            switch (m)
+            switch (m%7)
             {
                 case 0:
                     ////Debug.Log("WEF WEF EW");
@@ -291,7 +317,7 @@ public class GenerateAtoms : MonoBehaviour
         //    octahedraArray[0].transform.RotateAround(gameObject.transform.FindChild("Octahedra 0").FindChild("B").position, Vector3.right, 15);
          //   octahedraArray[0].transform.RotateAround(gameObject.transform.FindChild("Perovskite Unit Cell 0").FindChild("Octahedra 0").FindChild("B").position, Vector3.up, 15);
          //use this as template pl0x
-        octahedraArray[0].transform.RotateAround(gameObject.transform.FindChild(perovskiteUnitCell[0].name).FindChild(octahedraArray[0].name).FindChild("B").position, Vector3.up, 15);
+        octahedraArray[0].transform.RotateAround(gameObject.transform.FindChild(perovskiteUnitCell[0].name).FindChild(octahedraArray[0].name).FindChild("B").position, Vector3.up, sliderValue);
         
 
 
@@ -302,39 +328,39 @@ public class GenerateAtoms : MonoBehaviour
         //     octahedraArray[1].transform.RotateAround(gameObject.transform.FindChild("Octahedra 1").FindChild("B").position, Vector3.right, 15);
         //octahedraArray[1].transform.RotateAround(gameObject.transform.FindChild("Perovskite Unit Cell 1").FindChild("Octahedra 1").FindChild("B").position, -Vector3.up, 15);
 
-       // octahedraArray[2].transform.RotateAround(gameObject.transform.FindChild("Octahedra 2").FindChild("B").position, Vector3.back, 15);
-       //     octahedraArray[2].transform.RotateAround(gameObject.transform.FindChild("Octahedra 2").FindChild("B").position, -Vector3.right, 15);
+        // octahedraArray[2].transform.RotateAround(gameObject.transform.FindChild("Octahedra 2").FindChild("B").position, Vector3.back, 15);
+        //     octahedraArray[2].transform.RotateAround(gameObject.transform.FindChild("Octahedra 2").FindChild("B").position, -Vector3.right, 15);
         //octahedraArray[2].transform.RotateAround(gameObject.transform.FindChild("Octahedra 2").FindChild("B").position, -Vector3.up, 15);
 
-      //  octahedraArray[3].transform.RotateAround(gameObject.transform.FindChild("Octahedra 3").FindChild("B").position, Vector3.forward, 15);
-      //      octahedraArray[3].transform.RotateAround(gameObject.transform.FindChild("Octahedra 3").FindChild("B").position, -Vector3.right, 15);
-       // octahedraArray[3].transform.RotateAround(gameObject.transform.FindChild("Octahedra 3").FindChild("B").position, Vector3.up, 15);
+        //  octahedraArray[3].transform.RotateAround(gameObject.transform.FindChild("Octahedra 3").FindChild("B").position, Vector3.forward, 15);
+        //      octahedraArray[3].transform.RotateAround(gameObject.transform.FindChild("Octahedra 3").FindChild("B").position, -Vector3.right, 15);
+        // octahedraArray[3].transform.RotateAround(gameObject.transform.FindChild("Octahedra 3").FindChild("B").position, Vector3.up, 15);
 
         //TOP LAYER
-      //  octahedraArray[4].transform.RotateAround(gameObject.transform.FindChild("Octahedra 4").FindChild("B").position, -Vector3.back, 15);
-       //     octahedraArray[4].transform.RotateAround(gameObject.transform.FindChild("Octahedra 4").FindChild("B").position, -Vector3.right, 15);
-      //  octahedraArray[4].transform.RotateAround(gameObject.transform.FindChild("Octahedra 4").FindChild("B").position, -Vector3.up, 15);
+        //  octahedraArray[4].transform.RotateAround(gameObject.transform.FindChild("Octahedra 4").FindChild("B").position, -Vector3.back, 15);
+        //     octahedraArray[4].transform.RotateAround(gameObject.transform.FindChild("Octahedra 4").FindChild("B").position, -Vector3.right, 15);
+        //  octahedraArray[4].transform.RotateAround(gameObject.transform.FindChild("Octahedra 4").FindChild("B").position, -Vector3.up, 15);
 
-      //  octahedraArray[5].transform.RotateAround(gameObject.transform.FindChild("Octahedra 5").FindChild("B").position, -Vector3.forward, 15);
-      //      octahedraArray[5].transform.RotateAround(gameObject.transform.FindChild("Octahedra 5").FindChild("B").position, -Vector3.right, 15);
-      //  octahedraArray[5].transform.RotateAround(gameObject.transform.FindChild("Octahedra 5").FindChild("B").position, Vector3.up, 15);
+        //  octahedraArray[5].transform.RotateAround(gameObject.transform.FindChild("Octahedra 5").FindChild("B").position, -Vector3.forward, 15);
+        //      octahedraArray[5].transform.RotateAround(gameObject.transform.FindChild("Octahedra 5").FindChild("B").position, -Vector3.right, 15);
+        //  octahedraArray[5].transform.RotateAround(gameObject.transform.FindChild("Octahedra 5").FindChild("B").position, Vector3.up, 15);
 
-       // octahedraArray[6].transform.RotateAround(gameObject.transform.FindChild("Octahedra 6").FindChild("B").position, -Vector3.back, 15);
-      //      octahedraArray[6].transform.RotateAround(gameObject.transform.FindChild("Octahedra 6").FindChild("B").position, Vector3.right, 15);
-      //  octahedraArray[6].transform.RotateAround(gameObject.transform.FindChild("Octahedra 6").FindChild("B").position, Vector3.right, 15);
+        // octahedraArray[6].transform.RotateAround(gameObject.transform.FindChild("Octahedra 6").FindChild("B").position, -Vector3.back, 15);
+        //      octahedraArray[6].transform.RotateAround(gameObject.transform.FindChild("Octahedra 6").FindChild("B").position, Vector3.right, 15);
+        //  octahedraArray[6].transform.RotateAround(gameObject.transform.FindChild("Octahedra 6").FindChild("B").position, Vector3.right, 15);
 
-      //  octahedraArray[7].transform.RotateAround(gameObject.transform.FindChild("Octahedra 7").FindChild("B").position, -Vector3.forward, 15);
-       //     octahedraArray[7].transform.RotateAround(gameObject.transform.FindChild("Octahedra 7").FindChild("B").position, Vector3.right, 15);
-      //  octahedraArray[7].transform.RotateAround(gameObject.transform.FindChild("Octahedra 7").FindChild("B").position, -Vector3.right, 15);
-        
+        //  octahedraArray[7].transform.RotateAround(gameObject.transform.FindChild("Octahedra 7").FindChild("B").position, -Vector3.forward, 15);
+        //     octahedraArray[7].transform.RotateAround(gameObject.transform.FindChild("Octahedra 7").FindChild("B").position, Vector3.right, 15);
+        //  octahedraArray[7].transform.RotateAround(gameObject.transform.FindChild("Octahedra 7").FindChild("B").position, -Vector3.right, 15);
+
 
         //}
     }
-    void Update()
-    {
+    //void Update()
+    //{
         //octahedraArray[0].transform.Rotate(Vector3.back, Time.deltaTime * 4, Space.Self);
         //octahedraArray[1].transform.RotateAround(/*.forward*/XatomsArray[4].transform.position, Vector3.forward, Time.deltaTime * 4);
-    }
+   // }
     public void rotate(GameObject oct)
     {
         oct.transform.Rotate(Vector3.up * Time.deltaTime * 10, Space.World);
